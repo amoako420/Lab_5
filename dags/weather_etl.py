@@ -5,13 +5,13 @@ from airflow.decorators import task
 from airflow.utils.dates import days_ago
 import requests
 import json
-from api_key import api_key
 
 
-POSTGRES_CONN_ID='postgres_default'
+
+POSTGRES_CONN_ID='lab_5_connections'
 city_name = 'munich'
 API_CONN_ID='openweather_api'
-API_key = api_key()
+API_key = 'f47b7320ff3f8199243a2954fadeccd4'
 
 default_args={
     'owner':'amoako',
