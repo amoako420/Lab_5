@@ -46,18 +46,25 @@ with DAG(dag_id='weather_etl_pipeline',
     def transform_weather_data(weather_data):
         #Transforming the data
         current_weather = weather_data['current_weather']
+
+        ##Kevin to Fahrenheit
+        kevin = current_weather['main']['temp']
+        fahrenheit = ((kevin - 273.15)*1.8) + 32
+        
+
+
         transformed_data = {
-            'city': current_weather[''],
-            'temperature': current_weather['temperature'],
-            'windspeed': current_weather['windspeed'],
-            'winddirection': current_weather['winddirection'],
-            'weathercode': current_weather['weathercode']
+            'city': current_weather['name'],
+            'temperature': fahrenheit,
+            'pressure': current_weather['main']['pressure'],
+            'humidity': current_weather['main']['humidity'],
+            'timestamps': current_weather['timestamps']
         }
         return transformed_data
     
     @task()
     def load_weather_data(transformed_data):
-        """Load transformed data into PostgreSQL."""
+        
         pg_hook = PostgresHook(postgres_conn_id=POSTGRES_CONN_ID)
         conn = pg_hook.get_conn()
         cursor = conn.cursor()
@@ -65,25 +72,22 @@ with DAG(dag_id='weather_etl_pipeline',
         # Create table if it doesn't exist
         cursor.execute("""
         CREATE TABLE IF NOT EXISTS daily_weather (
+            city VARCHAR(255),
             temperature FLOAT,
-            windspeed FLOAT,
-            winddirection FLOAT,
-            weathercode INT,
+            humidity INT,
             timestamp TIMESTAMP DEFAULT CURRENT_TIMESTAMP
         );
         """)
 
         # Insert transformed data into the table
         cursor.execute("""
-        INSERT INTO weather_data (latitude, longitude, temperature, windspeed, winddirection, weathercode)
+        INSERT INTO weather_data (city, temperature, humidity, timestamp)
         VALUES (%s, %s, %s, %s, %s, %s)
         """, (
-            transformed_data['latitude'],
-            transformed_data['longitude'],
+            transformed_data['city'],
             transformed_data['temperature'],
-            transformed_data['windspeed'],
-            transformed_data['winddirection'],
-            transformed_data['weathercode']
+            transformed_data['humidity'],
+            transformed_data['timestamp']
         ))
 
         conn.commit()
