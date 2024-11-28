@@ -1,6 +1,0 @@
-postgres:
-    port: "8085"
-project:
-    name: lab-5
-webserver:
-    port: "8084"
