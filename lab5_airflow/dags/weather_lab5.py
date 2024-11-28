@@ -38,7 +38,7 @@ def weather_data():
         log_response=True,
     )
 
-    # Task 3: Transform data using XCom
+    # Task 3: Transform data 
     @task()
     def transform_data(weather_data):
         ###Transform the weather data.
@@ -92,7 +92,7 @@ def weather_data():
     is_api_active >> get_weather_data
 
     # Use XComs to pass data between tasks
-    transformed = transform_data(get_weather_data.output)  # Use XCom for API response
+    transformed = transform_data(get_weather_data.output)  
     transformed >> load_weather_data(transformed)
 
 weather_data()
