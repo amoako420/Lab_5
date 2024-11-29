@@ -91,7 +91,6 @@ def weather_data():
     # Task Dependencies
     is_api_active >> get_weather_data
 
-    # Use XComs to pass data between tasks
     transformed = transform_data(get_weather_data.output)  
     transformed >> load_weather_data(transformed)
 
