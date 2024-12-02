@@ -15,7 +15,7 @@ api_key = 'f47b7320ff3f8199243a2954fadeccd4'
     schedule="@daily",
     start_date=datetime(2024, 11, 28),
     catchup=False,
-    default_args={"owner": "Amoako", "retries": 3},
+    default_args={"owner": "Amoako", "retries": 2},
     tags=["Lab5"],
 )
 def weather_data():
@@ -40,16 +40,16 @@ def weather_data():
 
     # Task 3: Transform data 
     @task()
-    def transform_data(weather_data):
+    def transform_data(current_weather):
         ###Transform the weather data.
-        kevin = weather_data['main']['temp']
+        kevin = current_weather['main']['temp']
         fahrenheit = ((kevin - 273.15) * 1.8) + 32
 
         transformed_data = {
-            'city': weather_data['name'],
+            'city': current_weather['name'],
             'temperature': fahrenheit,
-            'pressure': weather_data['main']['pressure'],
-            'humidity': weather_data['main']['humidity'],
+            'pressure': current_weather['main']['pressure'],
+            'humidity': current_weather['main']['humidity'],
         }
         return transformed_data  
 

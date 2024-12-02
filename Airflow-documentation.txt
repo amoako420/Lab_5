@@ -1,0 +1,19 @@
+## The Airflow Documentation for lab5
+A dag was created with id as lab5, to run on daily basis the start_date was 28th November,2024,
+The tags attached to the dag was lab5.
+ 
+The weather_data function encompass all the tasks, that will run in the dags.
+
+
+The first task was to check the API readiness with the HttpSensor, HttpSensor is a sensors
+used in airflow that waits for an API to be available. This sensor is useful if you want to ensure
+ your API requests are successful.
+
+SimpleHttpOperator task posts a GET request to an API and returns the response, a 
+lambda function is passed to get the json of the response.
+
+The third task is a function that takes a parameter of current_weather that is
+just a json, the function will perform some transformation like changing the temperature
+from kevin to fahrenheit.
+
+The last task loads the transformed_data into the postgres database.
