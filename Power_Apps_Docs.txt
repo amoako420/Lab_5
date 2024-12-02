@@ -1,0 +1,4 @@
+The data contained over 1 millions rows, which was difficult for 
+automation. 
+A python scripts was applied to the excel file to get the first 100 files with the 
+python library called pandas, the result was saved as Taxi_data.csv.
